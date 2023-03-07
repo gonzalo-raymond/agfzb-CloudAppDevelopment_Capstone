@@ -1,11 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
-    <body>
-    <!--Add a registration form here -->
-    </body>
+<body>
+
+    <!--Add a nav bar here -->
+    <nav class="navbar navbar-light shadow" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best Cars</a> 
+            </div>
+            
+            <ul class="nav navbar-nav flex-row">
+                {% if current_endpoint == "/djangoapp/about/" %}
+                    <li class="nav-item mx-5 active">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item mx-5">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    </li>
+                {% elif current_endpoint == "/djangoapp/contact/" %}
+                    <li class="nav-item mx-5">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item mx-5 active">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item mx-5">
+                        <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item mx-5">
+                        <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    </li>
+                {% endif %}
+            </ul>
+            
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a class="btn btn-link" href="#">({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main class="mt-5">
+        <!--Add a registration form here -->
+        <form action="{% url 'djangoapp:registration' %}" method="post">
+            <div class="container">
+                <h1>Sign Up</h1>
+                <hr>
+                <div class="form-group">
+                    <label for="username"><b>User Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required>
+                    <label for="firstname"><b>First Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required>
+                    <label for="lastname"><b>Last Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter Last Name: " name="lastname" required>
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" class="form-control" placeholder="Enter Password: " name="psw" required>
+                    {% if message %}
+                        <div class="alert alert-warning" id="register-alert">
+                            {{ message }}
+                        </div>
+                        <script>
+                            setTimeout(() => {
+                                document.getElementById("register-alert").classList.add("d-none");
+                            }, "3000");
+                        </script>
+                    {% endif %}
+                    <div class="mt-3">
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type="submit">Sign Up</button>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </main>
+    
+
+</body>
 </html>

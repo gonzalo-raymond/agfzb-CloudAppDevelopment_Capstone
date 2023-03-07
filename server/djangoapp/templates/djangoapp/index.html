@@ -70,8 +70,18 @@
             </ul>
         </div>
     </nav>
+    {% if message %}
+        <div class="alert alert-warning" id="login-alert">
+            {{ message }}
+        </div>
+        <script>
+            setTimeout(() => {
+                document.getElementById("login-alert").classList.add("d-none");
+            }, "3000");
+        </script>
+    {% endif %}
     <!--Add a dealer table here -->
 
-
+    
 </body>
 </html>

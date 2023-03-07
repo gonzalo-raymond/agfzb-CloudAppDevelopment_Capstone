@@ -41,10 +41,11 @@ def login_request(request):
         user = authenticate(username = username, password = password)
         if user is not None:
             login(request, user)
-            return redirect("djangoapp:index")
+            return redirect("django:index")
         else:
             context["message"] = "Invalid username or password."
             return render(request, "djangoapp/index.html", context)
+            
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
