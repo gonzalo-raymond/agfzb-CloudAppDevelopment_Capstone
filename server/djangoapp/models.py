@@ -1,5 +1,9 @@
-from django.db import models
+import sys
 from django.utils.timezone import now
+from django.db import models
+from django.conf import settings
+import uuid
+
 
 
 # Create your models here.
@@ -10,8 +14,8 @@ from django.utils.timezone import now
 # - Any other fields you would like to include in car make model
 # - __str__ method to print a car make object
 class CarMake(models.Model):
-    name = models.CharField(max_length = 30)
-    description = models.CharField(max_length = 200)
+    name = models.CharField(null=False, max_length=30, default="Car Maker")
+    description = models.TextField(max_length=1000)
 
     def __str__(self):
         return self.name
@@ -26,31 +30,30 @@ class CarMake(models.Model):
 # - Any other fields you would like to include in car model
 # - __str__ method to print a car make object
 class CarModel(models.Model):
-    car_make = models.ForeignKey(CarMake, on_delete = models.CASCADE)
-    dealer_id = models.IntegerField()
-    name = models.CharField(max_length = 20)
+    car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE)
+    dealer_id = models.IntegerField(default=0)
+    name = models.CharField(max_length=200, default="Model")
 
     SEDAN = "sedan"
     SUV = "suv"
     WAGON = "wagon"
+    COUPE = "coupe"
 
     TYPE_CHOICES = [
         (SEDAN, "Sedan"),
         (SUV, "Suv"),
-        (WAGON, "Wagon")
+        (WAGON, "Wagon"),
+        (COUPE, "Coupe")
     ]
 
     car_type = models.CharField(
-        null = False,
-        max_length = 20,
-        choices = TYPE_CHOICES,
-        default = SEDAN
+        null=False,
+        max_length=20,
+        choices=TYPE_CHOICES,
+        default=SEDAN
     )
 
-    car_year = models.DateField(null = True)
-
-    def car_make_name(self):
-        return self.car_make.all().first()
+    car_year = models.DateField(null=True)
 
     def __str__(self):
         return self.name
