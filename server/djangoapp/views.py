@@ -80,18 +80,24 @@ def registration_request(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
+
     if request.method == "GET":
+
         st = request.GET.get("st")
         dealerId = request.GET.get("dealerId")
+
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-dealership.json"
+
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
+
         if st:
             dealerships = get_dealers_from_cf(url, st=st)
         elif dealerId:
-            dealerships = get_dealers_from_cf(url, dealeId=dealerId)    
+            dealerId = int(dealerId)
+            dealerships = get_dealers_from_cf(url, dealerId=dealerId)    
         # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for index, dealer in enumerate(dealerships)])
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
         return HttpResponse(dealer_names)
 
