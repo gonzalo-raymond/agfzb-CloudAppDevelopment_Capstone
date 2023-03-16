@@ -14,7 +14,7 @@ import uuid
 # - Any other fields you would like to include in car make model
 # - __str__ method to print a car make object
 class CarMake(models.Model):
-    
+
     name = models.CharField(null=False, max_length=30, default="Car Maker")
     description = models.TextField(max_length=1000)
 
@@ -88,3 +88,29 @@ class CarDealer:
         return "Dealer name: " + self.full_name
 
 # <HINT> Create a plain Python class `DealerReview` to hold review data
+class DealerReview:
+
+    def __init__(self, dealership, name, purchase, review, id, purchase_date=None, car_make=None, car_model=None, car_year=None, sentiment=None):
+        # Review Dealership
+        self.dealership = dealership
+        # User Name
+        self.name = name
+        # Purchase Status
+        self.purchase = purchase
+        # User Review
+        self.review = review
+        # Purchase Date
+        self.purchase_date = purchase_date
+        # Car Make
+        self.car_make = car_make
+        # Car Model
+        self.car_model = car_model
+        # Car Year
+        self.car_year = car_year
+        # User Sentiment
+        self.sentiment = sentiment
+        # Review Id
+        self.id = id
+
+        def __str__(self):
+            return "Review: " + self.review
