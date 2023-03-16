@@ -13,9 +13,7 @@ import json
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
 # Create your views here.
-
 
 # Create an `about` view to render a static about page
 def about(request):
@@ -85,9 +83,7 @@ def get_dealerships(request):
 
         st = request.GET.get("st")
         dealerId = request.GET.get("dealerId")
-
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-dealership.json"
-
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
 
@@ -95,10 +91,11 @@ def get_dealerships(request):
             dealerships = get_dealers_from_cf(url, st=st)
         elif dealerId:
             dealerId = int(dealerId)
-            dealerships = get_dealers_from_cf(url, dealerId=dealerId)    
+            dealerships = get_dealers_from_cf(url, dealerId=dealerId)
+
         # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
+        dealer_names = ' '.join([dealer.full_name for dealer in dealerships])
+        # Return a list of dealer full name
         return HttpResponse(dealer_names)
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
@@ -114,7 +111,7 @@ def get_dealer_details(request, dealer_id):
         # Get reviews from the URL
         reviews = get_dealer_reviews_from_cf(url, dealerId=dealer_id)
         # Concat all review's content
-        reviews_content = ' '.join([review.review for review in reviews])
+        reviews_content = ' '.join([f"{review.review} - {review.sentiment}" for review in reviews])
         # Return a list of reviews content
         return HttpResponse(reviews_content)
 

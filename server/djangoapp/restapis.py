@@ -1,9 +1,9 @@
+import os
 import requests
 import json
 # import related models here
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
-
 
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
@@ -103,7 +103,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 def analyze_review_sentiments(dealerreview):
 
     url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/3ed1e618-45f3-40f5-870d-8db214770298/v1/analyze"
-    api_key = "RMA30zKOJfgyqhk70Uyyqo0bJcmjYvhcX6Lp1Pr3JzmD"
+    api_key = os.getenv('apikey')
     json_result = get_request(url, api_key, text= dealerreview, 
                               version="2022-04-07", features=["sentiment"], 
                               return_analyzed_text=True, language="en")
