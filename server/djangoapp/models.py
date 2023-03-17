@@ -4,8 +4,6 @@ from django.db import models
 from django.conf import settings
 import uuid
 
-
-
 # Create your models here.
 
 # <HINT> Create a Car Make model `class CarMake(models.Model)`:
@@ -17,6 +15,8 @@ class CarMake(models.Model):
 
     name = models.CharField(null=False, max_length=30, default="Car Maker")
     description = models.TextField(max_length=1000)
+
+    
 
     def __str__(self):
         return self.name

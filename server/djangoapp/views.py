@@ -207,6 +207,6 @@ def populate(request):
                 car["car_year"] = f"{review['car_year']}-03-17"
                 cars_list.append(car)
 
-        print(cars_list)
-        #populate_db(cars_list)
+        populate_db(cars_list)
+        
         return redirect("djangoapp:index")

@@ -13,7 +13,7 @@ class CarMakeAdmin(admin.ModelAdmin):
 
 # CarModelAdmin class
 class CarModelAdmin(admin.ModelAdmin):
-    list_display = ("name", "car_make", "car_type", "car_year")
+    list_display = ("name", "car_make", "car_type", "car_year", "dealer_id")
 
 # Register models here
 admin.site.register(CarMake, CarMakeAdmin)

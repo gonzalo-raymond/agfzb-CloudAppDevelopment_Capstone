@@ -82,7 +82,7 @@
                             <div class="card-body">
                                 {% if review.car_make %}
                                     <h3 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h3>
-                                    <h3 class="card-title">{{ review.car_year }}</h3>
+                                    <h3 class="card-title">{{ review.purchase_date|slice:"-4:" }}</h3>
                                     <p class="card-text">{{ review.review }}</p>
                                 {% else %}
                                     <h3 class="card-text">{{ review.review }}</h3>
