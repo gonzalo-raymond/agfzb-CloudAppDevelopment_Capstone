@@ -149,23 +149,30 @@ def add_review(request, dealer_id):
         newId = (reviews_ids[-1] + 1) 
         
         purchase_status = False
-        purchasecheck = request.POST["purchasecheck"]
-        if purchasecheck == "on":
+        if "purchasecheck" in request.POST:
             purchase_status = True
 
         car = CarModel.objects.filter(id=int(request.POST["car"])).values("name", "car_year", "car_make__name").first()
 
         review = dict()
-        review["id"] = newId
-        review["time"] = datetime.utcnow().isoformat()
-        review["name"] = request.POST["name"]
-        review["dealership"] = int(dealer_id)
-        review["review"] = request.POST["content"]
-        review["purchase"] = purchase_status
-        review["purchase_date"] = request.POST["purchasedate"]
-        review["car_make"] = car["car_make__name"]
-        review["car_model"] = car["name"]
-        review["car_year"] = car["car_year"].strftime("%Y")
+        if purchase_status:
+            review["id"] = newId
+            review["time"] = datetime.utcnow().isoformat()
+            review["name"] = request.POST["name"]
+            review["dealership"] = int(dealer_id)
+            review["review"] = request.POST["content"]
+            review["purchase"] = purchase_status
+            review["purchase_date"] = request.POST["purchasedate"]
+            review["car_make"] = car["car_make__name"]
+            review["car_model"] = car["name"]
+            review["car_year"] = car["car_year"].strftime("%Y")
+        else:
+            review["id"] = newId
+            review["time"] = datetime.utcnow().isoformat()
+            review["name"] = request.POST["name"]
+            review["dealership"] = int(dealer_id)
+            review["review"] = request.POST["content"]
+            review["purchase"] = purchase_status
 
         json_payload = dict()
         json_payload["review"] = review
@@ -189,8 +196,17 @@ def populate(request):
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-review.json"
         reviews = get_request(url)
         reviews_list = reviews["reviews"]
+        
+        cars_list = []
         for review in reviews_list:
             if "car_make" in review:
-                print(review["car_make"])
-        #populate_db(review_list)
+                car = dict()
+                car["car_make_name"] = review["car_make"]
+                car["name"] = review["car_model"]
+                car["dealer_id"] = review["dealership"]
+                car["car_year"] = f"{review['car_year']}-03-17"
+                cars_list.append(car)
+
+        print(cars_list)
+        #populate_db(cars_list)
         return redirect("djangoapp:index")
