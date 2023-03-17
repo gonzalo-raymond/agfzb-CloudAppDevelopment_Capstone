@@ -44,7 +44,7 @@
             
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
-                            <li>
+                            <li class="d-flex align-items-baseline">
                                 <a href="{% url 'djangoapp:add_review' dealer_id %}">Write a Review</a>
                                 <a class="btn btn-link" href="#">({{ user.username }})</a>
                                 <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
