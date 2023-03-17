@@ -16,7 +16,12 @@ class CarMake(models.Model):
     name = models.CharField(null=False, max_length=30, default="Car Maker")
     description = models.TextField(max_length=1000)
 
-    
+    def dealer_id(self):
+        car_models = self.carmodel_set.all()
+        if car_models.exists():
+            return car_models.first().dealer_id
+        else:
+            return None
 
     def __str__(self):
         return self.name
