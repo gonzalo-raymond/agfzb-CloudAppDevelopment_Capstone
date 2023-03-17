@@ -103,16 +103,28 @@ def get_dealer_details(request, dealer_id):
 
     if request.method == "GET":
 
+        url_dealership = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-dealership.json"
+        dealership = get_dealers_from_cf(url_dealership, dealerId=dealer_id)
+
+        context = {}
+
+        
         dealer_id = int(dealer_id)
 
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-review.json"
-
+        url_review = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-review.json"
+            
         # Get reviews from the URL
-        reviews = get_dealer_reviews_from_cf(url, dealerId=dealer_id)
-        # Concat all review's content
-        reviews_content = ' '.join([f"{review.review} - {review.sentiment}" for review in reviews])
-        # Return a list of reviews content
-        return HttpResponse(reviews_content)
+        reviews = get_dealer_reviews_from_cf(url_review, dealerId=dealer_id)
+            
+        dealership_name = ""
+        if dealership:
+            dealership_name = dealership[0].full_name 
+        # Return a list of reviews
+        context["review_list"] = reviews
+        context["dealer_name"] = dealership_name
+        context["dealer_id"] = dealer_id
+       
+        return render(request, "djangoapp/dealer_details.html", context=context)
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
@@ -128,7 +140,7 @@ def add_review(request, dealer_id):
             review["time"] = datetime.utcnow().isoformat()
             review["name"] = "Gonzalo Raymond"
             review["dealership"] = int(dealer_id)
-            review["review"] = "The electric mobility is the future"
+            review["review"] = "The electric mobility is the future!"
             review["purchase"] = True
             review["purchase_date"] = "03/16/2023"
             review["car_make"] = "BYD"
@@ -140,7 +152,7 @@ def add_review(request, dealer_id):
 
             response = post_request(url, json_payload, dealerId = dealer_id)
             print(response)
-            return HttpResponse(response)
+            return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
 
         else:
             return redirect("djangoapp:index")
