@@ -65,16 +65,6 @@
                     </ul>
                 </div>
             </nav>
-            {% if message %}
-                <div class="alert alert-warning" id="login-alert">
-                    {{ message }}
-                </div>
-                <script>
-                    setTimeout(() => {
-                        document.getElementById("login-alert").classList.add("d-none");
-                    }, "3000");
-                </script>
-            {% endif %}
         <!-- Add reviews as cards -->
         <main class="container-fluid">
             <h2 class="mt-4">Reviews for <b>{{ dealer_name }}</b></h2>

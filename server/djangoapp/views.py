@@ -129,6 +129,9 @@ def get_dealer_details(request, dealer_id):
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
 
+    url_dealership = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/get-dealership.json"
+    dealership = get_dealers_from_cf(url_dealership, dealerId=dealer_id)
+
     context = {}
 
     if request.method == "POST":
@@ -153,6 +156,13 @@ def add_review(request, dealer_id):
         return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
 
     elif request.method == "GET":
+        cars = CarModel.objects.filter(dealer_id=dealer_id)
+        dealership_name = ""
+        if dealership:
+            dealership_name = dealership[0].full_name
+
         context["dealer_id"] = dealer_id
+        context["dealer_name"] = dealership_name
+        context["cars"] = cars
         return render(request, "djangoapp/add_review.html", context=context)
    
