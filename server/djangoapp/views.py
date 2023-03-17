@@ -129,31 +129,30 @@ def get_dealer_details(request, dealer_id):
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
 
-    #if request.method == "POST":
+    context = {}
 
-        if request.user.is_authenticated:
+    if request.method == "POST":
 
-            url = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/post-review.json"
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/52ac0e20-0ea8-4898-97d4-6706d5dd228d/dealership-package/post-review.json"
 
-            review = dict()
-            review["id"] = 51
-            review["time"] = datetime.utcnow().isoformat()
-            review["name"] = "Gonzalo Raymond"
-            review["dealership"] = int(dealer_id)
-            review["review"] = "The electric mobility is the future!"
-            review["purchase"] = True
-            review["purchase_date"] = "03/16/2023"
-            review["car_make"] = "BYD"
-            review["car_model"] = "HAN"
-            review["car_year"] = 2023
+        review = dict()
+        review["id"] = 51
+        review["time"] = datetime.utcnow().isoformat()
+        review["name"] = "Gonzalo Raymond"
+        review["dealership"] = int(dealer_id)
+        review["review"] = "The electric mobility is the future!"
+        review["purchase"] = True
+        review["purchase_date"] = "03/16/2023"
+        review["car_make"] = "BYD"
+        review["car_model"] = "HAN"
+        review["car_year"] = 2023
 
-            json_payload = dict()
-            json_payload["review"] = review
+        json_payload = dict()
+        json_payload["review"] = review
+        response = post_request(url, json_payload, dealerId = dealer_id)
+        return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
 
-            response = post_request(url, json_payload, dealerId = dealer_id)
-            print(response)
-            return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
-
-        else:
-            return redirect("djangoapp:index")
-        
+    elif request.method == "GET":
+        context["dealer_id"] = dealer_id
+        return render(request, "djangoapp/add_review.html", context=context)
+   
