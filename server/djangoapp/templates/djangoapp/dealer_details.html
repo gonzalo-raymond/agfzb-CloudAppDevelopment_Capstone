@@ -70,27 +70,35 @@
             <h2 class="mt-4">Reviews for <b>{{ dealer_name }}</b></h2>
             <div class="container mt-4">
                 <div class="card-columns">
-                    {% for review in review_list %}
-                        <div class="card" style="min-height: 210px;">
-                            {% if review.sentiment == "positive" %}
-                                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/positive.png" WIDTH="40px" alt="Positive Sentiment">
-                            {% elif review.sentiment == "negative" %}
-                                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/negative.png" WIDTH="40px" alt="Negative Sentiment">
-                            {% else %}
-                                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" WIDTH="40px" alt="Neutral Sentiment">
-                            {% endif %}
-                            <div class="card-body">
-                                {% if review.car_make %}
-                                    <h3 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h3>
-                                    <h3 class="card-title">{{ review.purchase_date|slice:"-4:" }}</h3>
-                                    <p class="card-text">{{ review.review }}</p>
+                    {% if review_list %}
+
+                        {% for review in review_list %}
+                            <div class="card" style="min-height: 210px;">
+                                {% if review.sentiment == "positive" %}
+                                    <img class="card-img-left" src="{{MEDIA_URL}}/emoji/positive.png" WIDTH="40px" alt="Positive Sentiment">
+                                {% elif review.sentiment == "negative" %}
+                                    <img class="card-img-left" src="{{MEDIA_URL}}/emoji/negative.png" WIDTH="40px" alt="Negative Sentiment">
                                 {% else %}
-                                    <h3 class="card-text">{{ review.review }}</h3>
+                                    <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" WIDTH="40px" alt="Neutral Sentiment">
                                 {% endif %}
+                                <div class="card-body">
+                                    {% if review.car_make %}
+                                        <h3 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h3>
+                                        <h3 class="card-title">{{ review.purchase_date|slice:"-4:" }}</h3>
+                                        <p class="card-text">{{ review.review }}</p>
+                                    {% else %}
+                                        <h3 class="card-text">{{ review.review }}</h3>
+                                    {% endif %}
                                 
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+
+                    {% else %}
+
+                        <h3 class="text-muted text-center">No reviews for now...</h3>
+
+                    {% endif %}
 
                 </div>
             </div>
