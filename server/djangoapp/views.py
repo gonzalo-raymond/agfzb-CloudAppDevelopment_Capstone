@@ -152,13 +152,14 @@ def add_review(request, dealer_id):
         if "purchasecheck" in request.POST:
             purchase_status = True
 
-        car = CarModel.objects.filter(id=int(request.POST["car"])).values("name", "car_year", "car_make__name").first()
-
         review = dict()
         if purchase_status:
+
+            car = CarModel.objects.filter(id=int(request.POST["car"])).values("name", "car_year", "car_make__name").first()
+
             review["id"] = newId
             review["time"] = datetime.utcnow().isoformat()
-            review["name"] = request.POST["name"]
+            review["name"] = f"{request.user.first_name} {request.user.last_name}"
             review["dealership"] = int(dealer_id)
             review["review"] = request.POST["content"]
             review["purchase"] = purchase_status
@@ -169,7 +170,7 @@ def add_review(request, dealer_id):
         else:
             review["id"] = newId
             review["time"] = datetime.utcnow().isoformat()
-            review["name"] = request.POST["name"]
+            review["name"] = f"{request.user.first_name} {request.user.last_name}"
             review["dealership"] = int(dealer_id)
             review["review"] = request.POST["content"]
             review["purchase"] = purchase_status
